@@ -13,6 +13,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
 model User {
   id        Int   @id @default(autoincrement())
   email     String   @unique
@@ -21,6 +27,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts     Post[]
+  role      Role     @default(USER)
+  favorites Favorite[]
 }
 
 model Post {
@@ -31,5 +39,17 @@ model Post {
   authorId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  favorites Favorite[]
 }
+
+model Favorite {
+  id    Int  @id @default(autoincrement())
+  user  User @relation(fields:[userId], references: [id])
+  userId Int
+  post  Post @relation(fields:[postId], references: [id])
+  postId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
