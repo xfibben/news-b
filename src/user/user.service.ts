@@ -47,14 +47,14 @@ export class UserService {
         }
     }
 
-    async updateUser(user: UpdateUserDto){
+    async updateUser(username:string,user: UpdateUserDto){
         try{
             const verifyUser = await this.prisma.user.findUnique({
-                where:{username:user.username}
+                where:{username:username}
             })
             if(verifyUser){
                 return await this.prisma.user.update({
-                    where:{username:user.username},
+                    where:{username:username},
                     data: user
                 })
             }
